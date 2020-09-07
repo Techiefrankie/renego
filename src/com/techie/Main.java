@@ -13,13 +13,41 @@ public class Main {
         System.out.println("Please enter the seed value for b:");
 	    Long b = input.nextLong();
 
+	    int genAFactor, genBFactor, divisor;
         System.out.println("Please enter the number of iterations:");
 	    int numIteration = input.nextInt();
+
+        System.out.println("Do you want to set a factor for generator A? y/n:");
+        String response = input.next();
+        if (response.equalsIgnoreCase("y")) {
+            genAFactor = input.nextInt();
+        }
+        else {
+            genAFactor = 16807;
+        }
+
+        System.out.println("Do you want to set a factor for generator B? y/n:");
+        response = input.next();
+        if (response.equalsIgnoreCase("y")) {
+            genBFactor = input.nextInt();
+        }
+        else {
+            genBFactor = 48271;
+        }
+
+        System.out.println("Do you want to set a divisor? y/n:");
+        response = input.next();
+        if (response.equalsIgnoreCase("y")) {
+            divisor = input.nextInt();
+        }
+        else {
+            divisor = 2147483647;
+        }
 
 	    Long[][] mem = new Long[numIteration][numIteration];
 
 	    for (int i = 0; i < numIteration; i++){
-            Long[] temp = generate(a, b);
+            Long[] temp = generate(a, b, genAFactor, genBFactor, divisor);
 	        for (int j = 0; j < 2; j++){
 	            mem[i][j] = temp[j];
             }
@@ -29,17 +57,13 @@ public class Main {
 	        b = mem[i][1];
         }
 
-	    //finally, comapre values
+	    //finally, compare values
         checker(mem);
     }
 
-    public static Long[] generate(Long num1, Long num2){
+    public static Long[] generate(Long num1, Long num2, int genAFactor, int genBFactor, int divisor){
         Long genA = num1;
         Long genB = num2;
-
-        int genAFactor = 16807;
-        int genBFactor = 48271;
-        int divisor = 2147483647;
 
         //multiply generators with factors
         genA = genA * genAFactor;
